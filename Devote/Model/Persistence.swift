@@ -9,15 +9,15 @@ import CoreData
 
 struct PersistenceController {
     // MARK: - 1. PERSISTENT CONTROLLER
-
+    
     static let shared = PersistenceController()
-
+    
     // MARK: - 2. PERSISTENT CONTAITER
-
+    
     let container: NSPersistentContainer
-
+    
     // MARK: - 3. INITIALIZATION (load the persistent store)
-
+    
     init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "Devote")
         if inMemory {
@@ -30,15 +30,19 @@ struct PersistenceController {
         })
         container.viewContext.automaticallyMergesChangesFromParent = true
     }
-
+    
     // MARK: - 4. PREVIEW
-
+    
     static var preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
-        for _ in 0 ..< 10 {
+        
+        for i in 0 ..< 15 {
             let newItem = Item(context: viewContext)
             newItem.timestamp = Date()
+            newItem.task = "Sample task No \(i)"
+            newItem.completion = false
+            newItem.id = UUID()
         }
         do {
             try viewContext.save()
