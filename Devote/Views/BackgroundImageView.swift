@@ -14,6 +14,9 @@ struct BackgroundImageView: View {
             .resizable()
             .scaledToFill()
             .ignoresSafeArea()
+            .background(
+                backgroundGradient
+            )
     }
 }
 

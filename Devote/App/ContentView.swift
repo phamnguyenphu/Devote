@@ -118,10 +118,6 @@ struct ContentView: View {
             .background(
                 BackgroundImageView()
             )
-            .background(
-                backgroundGradient
-            )
-            
             .navigationTitle("Daily Tasks")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
