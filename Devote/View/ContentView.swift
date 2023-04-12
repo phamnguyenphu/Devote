@@ -5,10 +5,13 @@
 //  Created by Pham Nguyen Phu on 11/04/2023.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct ContentView: View {
+    // MARK: - PROPERTY
+
+    // FETCHING DATA
     @Environment(\.managedObjectContext) private var viewContext
 
     @FetchRequest(
@@ -16,31 +19,7 @@ struct ContentView: View {
         animation: .default)
     private var items: FetchedResults<Item>
 
-    var body: some View {
-        NavigationView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                    } label: {
-                        Text(item.timestamp!, formatter: itemFormatter)
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-            Text("Select an item")
-        }
-    }
+    // MARK: - FUNCTION
 
     private func addItem() {
         withAnimation {
@@ -72,14 +51,35 @@ struct ContentView: View {
             }
         }
     }
-}
 
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
+    // MARK: - BODY
+
+    var body: some View {
+        NavigationView {
+            List {
+                ForEach(items) { item in
+                    NavigationLink {
+                        Text("Item at \(item.timestamp!, formatter: itemFormatter)")
+                    } label: {
+                        Text(item.timestamp!, formatter: itemFormatter)
+                    }
+                }
+                .onDelete(perform: deleteItems)
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    EditButton()
+                }
+                ToolbarItem {
+                    Button(action: addItem) {
+                        Label("Add Item", systemImage: "plus")
+                    }
+                }
+            }
+            Text("Select an item")
+        }
+    }
+}
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
