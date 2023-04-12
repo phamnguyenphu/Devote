@@ -37,7 +37,7 @@ struct PersistenceController {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
         
-        for i in 0 ..< 15 {
+        for i in 0 ..< 5 {
             let newItem = Item(context: viewContext)
             newItem.timestamp = Date()
             newItem.task = "Sample task No \(i)"
