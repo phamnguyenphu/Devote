@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct BackgroundImageView: View {
+    // MARK: - PROPERTY
+
+    // MARK: - BODY
+
     var body: some View {
         Image("rocket")
             .antialiased(true)
