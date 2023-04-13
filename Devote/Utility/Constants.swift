@@ -22,4 +22,8 @@ var backgroundGradient: LinearGradient {
     return LinearGradient(gradient: Gradient(colors: [.pink, .blue]), startPoint: .topLeading, endPoint: .bottomTrailing)
 }
 
+var backgroundGradientButton: LinearGradient {
+    return LinearGradient(gradient: Gradient(colors: [.pink, .blue]), startPoint: .leading, endPoint: .trailing)
+}
+
 // MARK: - UX
