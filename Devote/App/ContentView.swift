@@ -55,7 +55,7 @@ struct ContentView: View {
                             .fontWeight(.heavy)
                             .padding(.leading, 4)
                         Spacer()
-                
+                        
                         // EDIT BUTTON
                         EditButton()
                             .font(.system(size: 16, weight: .semibold))
@@ -115,10 +115,13 @@ struct ContentView: View {
                         Spacer(minLength: 300)
                     }
                 } //: VSTACK
+                .blur(radius: showNewTaskItem ? 8.0 : 0, opaque: false)
+                .transition(.slide)
+                .animation(.easeOut(duration: 0.5), value: showNewTaskItem)
                 
                 // new task item
                 if showNewTaskItem {
-                    BlankView()
+                    BlankView(backgroundColor: isDarkMode ? .black : .gray, backgroundOpacity: isDarkMode ? 0.3 : 0.5)
                         .onTapGesture {
                             withAnimation {
                                 showNewTaskItem = false
@@ -129,6 +132,7 @@ struct ContentView: View {
             } //: ZSTACK
             .background(
                 BackgroundImageView()
+                    .blur(radius: showNewTaskItem ? 8.0 : 0, opaque: false)
             )
         } //: NAVIGATION
     }
