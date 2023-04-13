@@ -11,11 +11,9 @@ import SwiftUI
 struct ContentView: View {
     // MARK: - PROPERTY
     
+    @AppStorage("isDarkMode") private var isDarkMode: Bool = false
     @State var task: String = ""
-    
-    private var isButtonDisable: Bool {
-        task.isEmpty
-    }
+    @State private var showNewTaskItem: Bool = false
     
     // FETCHING DATA
     @Environment(\.managedObjectContext) private var viewContext
@@ -27,26 +25,6 @@ struct ContentView: View {
     private var items: FetchedResults<Item>
     
     // MARK: - FUNCTION
-    
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-            newItem.task = task
-            newItem.completion = false
-            newItem.id = UUID()
-            
-            do {
-                try viewContext.save()
-            } catch {
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-            
-            task = ""
-            hideKeyboard()
-        }
-    }
     
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
@@ -66,30 +44,62 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             ZStack {
+                // main view
                 VStack {
-                    VStack(spacing: 16) {
-                        TextField("New Task", text: $task)
-                            .padding()
+                    // header
+                    
+                    HStack(spacing: 10) {
+                        // TITLE
+                        Text("Devote")
+                            .font(.system(.largeTitle))
+                            .fontWeight(.heavy)
+                            .padding(.leading, 4)
+                        Spacer()
+                
+                        // EDIT BUTTON
+                        EditButton()
+                            .font(.system(size: 16, weight: .semibold))
+                            .padding(.horizontal)
+                            .frame(minWidth: 70, minHeight: 24)
                             .background(
-                                Color(UIColor.systemGray6)
+                                Capsule()
+                                    .stroke(lineWidth: 2)
                             )
-                            .cornerRadius(12)
                         
+                        // APPEARANCE BUTTON
                         Button {
-                            addItem()
+                            isDarkMode.toggle()
                         } label: {
-                            Spacer()
-                            Text("SAVE")
-                            Spacer()
+                            Image(systemName: isDarkMode ? "moon.circle.fill" : "moon.circle")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24, height: 24)
+                                .font(.system(.title))
                         }
-                        .disabled(isButtonDisable)
-                        .padding()
-                        .foregroundColor(.white)
-                        .font(.headline)
-                        .background(isButtonDisable ? .gray : .pink)
-                        .cornerRadius(12)
-                    } //: VSTACK
+                    } //: HSTACK
                     .padding()
+                    .foregroundColor(.white)
+                    
+                    Spacer(minLength: 80)
+                    
+                    // new task button
+                    
+                    Button {
+                        showNewTaskItem = true
+                    } label: {
+                        Image(systemName: "plus.circle")
+                            .font(.system(size: 30, weight: .semibold, design: .rounded))
+                        Text("New Task")
+                            .font(.system(size: 24, weight: .bold, design: .rounded))
+                    }
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 15)
+                    .background(backgroundGradientButton)
+                    .clipShape(Capsule())
+                    .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.25), radius: 8, x: 2, y: 4)
+                    
+                    // tasks
                     List {
                         ForEach(items) { item in
                             NavigationLink {
@@ -110,16 +120,21 @@ struct ContentView: View {
                     .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 12)
                     .frame(maxWidth: 640)
                 } //: VSTACK
+                
+                // new task item
+                if showNewTaskItem {
+                    BlankView()
+                        .onTapGesture {
+                            withAnimation {
+                                showNewTaskItem = false
+                            }
+                        }
+                    NewTaskView(isShowing: $showNewTaskItem)
+                }
             } //: ZSTACK
             .background(
                 BackgroundImageView()
             )
-            .navigationTitle("Daily Tasks")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-            } //: TOOLBAR
         } //: NAVIGATION
     }
 }
