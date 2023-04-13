@@ -100,25 +100,20 @@ struct ContentView: View {
                     .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.25), radius: 8, x: 2, y: 4)
                     
                     // tasks
-                    List {
-                        ForEach(items) { item in
-                            NavigationLink {
-                                Text("Item at \(item.timestamp!, formatter: itemFormatter)")
-                            } label: {
-                                VStack(alignment: .leading) {
-                                    Text(item.task ?? "")
-                                        .font(.headline)
-                                        .fontWeight(.bold)
-                                    Text(item.timestamp!, formatter: itemFormatter)
-                                }
+                    if !items.isEmpty {
+                        List {
+                            ForEach(items) { item in
+                                ListRowItemView(item: item)
                             }
+                            .onDelete(perform: deleteItems)
                         }
-                        .onDelete(perform: deleteItems)
+                        .listStyle(.insetGrouped)
+                        .scrollContentBackground(.hidden)
+                        .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 12)
+                        .frame(maxWidth: 640)
+                    } else {
+                        Spacer(minLength: 300)
                     }
-                    .listStyle(.insetGrouped)
-                    .scrollContentBackground(.hidden)
-                    .shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.3), radius: 12)
-                    .frame(maxWidth: 640)
                 } //: VSTACK
                 
                 // new task item
