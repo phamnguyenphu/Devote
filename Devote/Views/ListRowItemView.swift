@@ -13,7 +13,7 @@ struct ListRowItemView: View {
     @Environment(\.managedObjectContext) var viewContext
     @ObservedObject var item: Item
 
-    // MARK: - BODY
+    // MARK: - BODY 
 
     var body: some View {
         Toggle(isOn: $item.completion) {
