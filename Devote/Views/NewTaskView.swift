@@ -59,6 +59,8 @@ struct NewTaskView: View {
                 
                 Button {
                     addItem()
+                    playSound(sound: "sound-ding", type: "mp3")
+                    feedback.notificationOccurred(.success)
                 } label: {
                     Spacer()
                     Text("SAVE")
@@ -66,6 +68,11 @@ struct NewTaskView: View {
                     Spacer()
                 }
                 .disabled(isButtonDisable)
+                .onTapGesture {
+                    if isButtonDisable {
+                        playSound(sound: "sound-tap", type: "mp3")
+                    }
+                }
                 .padding()
                 .foregroundColor(.white)
                 .background(isButtonDisable ? .blue : .pink)
